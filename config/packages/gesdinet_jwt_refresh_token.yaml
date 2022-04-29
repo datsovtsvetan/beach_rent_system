@@ -1,0 +1,16 @@
+gesdinet_jwt_refresh_token:
+    #ttl: 2592000
+    ttl: 2592000
+    ttl_update: true
+
+    #firewall: api //deprecated when refresh_jwt used in security.yaml
+    #token_parameter_name: refreshToken
+    #single_use: true
+    cookie:
+        enabled: true
+        same_site: none
+        path: /
+        domain: null
+        http_only: true
+        secure: true # default is true
+        remove_token_from_body: true

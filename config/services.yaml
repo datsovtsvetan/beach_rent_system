@@ -10,15 +10,29 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
+    #App\EventListener\ExceptionListener:
+        #public: true
+        #autowire: true
+        #tags:
+            #- { name: kernel.event_listener, event: kernel.exception }
+    acme_api.event.authentication_success_listener:
+    #App\EventListener\AuthenticationSuccessListener:
+        arguments: ['%lexik_jwt_authentication.token_ttl%']
+        class: App\EventListener\AuthenticationSuccessListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
+#     makes classes in src/ available to be used as services
+#     this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-
+    # Linkin\Component\DoctrineNamingStrategy\ORM\Mapping\CamelCaseNamingStrategy: '@Linkin\Component\DoctrineNamingStrategy\ORM\Mapping\CamelCaseNamingStrategy'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    app.naming_strategy.camelcase:
+        class: Linkin\Component\DoctrineNamingStrategy\ORM\Mapping\CamelCaseNamingStrategy
+        autowire: true
+        public: true
